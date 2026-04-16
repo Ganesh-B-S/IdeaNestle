@@ -7,7 +7,7 @@ function Header() {
       <div className="container header-content">
         <div className="logo-section">
           <img src="/logo.png" alt="Logo" />
-          <h1>My Portfolio</h1>
+          <h1>IdeaNestle</h1>
         </div>
 
         <nav className="nav">
