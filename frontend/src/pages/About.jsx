@@ -21,14 +21,8 @@ export default function About() {
       <p>
         I enjoy solving technical problems, improving systems, and creating solutions that connect industrial data with modern cloud and software technologies.                                                                                                                                                                     
       </p>
-      <p>
-        This page is protected and only accessible after login.
-      </p>
       <br />
 
-      <button onClick={() => navigate("/dashboard")}>
-        Back to Dashboard
-      </button>
     </div>
   );
 }

@@ -23,6 +23,12 @@ export default function Home() {
           <h3>Contact</h3>
           <p>Email: srishant.ganesh@gmail.com</p>
           <p>Mobile: 9482658630/9380356792    </p>
+          <p>LinkedIn:{" "}
+            <a href="https://www.linkedin.com/in/ganesh-b-s-126085148" target="_blank" rel="noopener noreferrer">Ganesh B S</a>
+          </p>
+          <p>Naukri:{" "}
+            <a href="https://www.naukri.com/mnjuser/profile" target="_blank" rel="noopener noreferrer">Ganesh B S</a>
+          </p>
         </section>
       </main>
     </>
