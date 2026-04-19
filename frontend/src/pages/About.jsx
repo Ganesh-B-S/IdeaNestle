@@ -2,16 +2,6 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function About() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/login");
-    }
-  }, []);
-
   return (
     <div style={{ padding: "40px" }}>
       <h1>About Me</h1>

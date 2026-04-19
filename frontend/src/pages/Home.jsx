@@ -5,7 +5,6 @@ import "./Home.css";
 export default function Home() {
   return (
     <>
-      <Header />
 
       {/* HERO SECTION */}
       <section className="hero" id="home">

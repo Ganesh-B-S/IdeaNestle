@@ -1,6 +1,6 @@
 .header {
-  background-color: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
+  background-color: #111;   /* ✅ black */
+  color: white;
 }
 
 .header-content {
@@ -27,11 +27,11 @@
 
 .nav a {
   font-weight: 500;
-  color: #333;
+  color: white;
 }
 
 .nav a:hover {
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid white;
 }
 
 /* Mobile */
