@@ -3,23 +3,17 @@ console.log("EMAIL_USER =", process.env.EMAIL_USER);
 console.log("EMAIL_PASS exists =", !!process.env.EMAIL_PASS);
 // Create transporter
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
   secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   },
-  tls: {
-    rejectUnauthorized: false,
-  },
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
 });
 
 //  Transporter Verification
-transporter.verify((error, success) => {
+transporter.verify((error) => {
   if (error) {
     console.error("SMTP Error:", error);
   } else {
@@ -31,7 +25,7 @@ transporter.verify((error, success) => {
 async function sendEmail({ to, subject, text }) {
   try {
     const info = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: '"IdeaNestle" <ideanestle.support@gmail.com>',
       to,
       subject,
       text,
