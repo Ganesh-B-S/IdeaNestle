@@ -21,8 +21,19 @@ export default function Home() {
       <main className="container">
         <section id="contact" className="fade-in" style={{ marginTop: "40px" }}>
           <h3>Contact</h3>
-          <p>Email:{""} <a href="srishant.ganesh@gmail.com"></a></p>
-          <p>Mobile:{""} <a href="Ph: 9482658630/9380356792"></a></p>
+          <p>
+            Email:{" "}
+              <a href="mailto:srishant.ganesh@gmail.com">
+                srishant.ganesh@gmail.com
+              </a>
+          </p>
+
+          <p>
+            Mobile:{" "}
+              <a href="tel:+919482658630">
+                    9482658630
+              </a>
+          </p>
           <p>LinkedIn:{" "}
             <a href="https://www.linkedin.com/in/ganesh-b-s-126085148" target="_blank" rel="noopener noreferrer">Ganesh B S</a>
           </p>
