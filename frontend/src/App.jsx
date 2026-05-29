@@ -34,6 +34,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/profile" element={<Profile />} />
+
+        <Route path="/edit-profile" element={<EditProfile />} />
+
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        <Route path="/reset-password" element={<ResetPassword />} />
+        
       </Routes>
     </>
   );
