@@ -170,6 +170,7 @@ exports.resetPassword = async (req, res, next) => {
 };
 
 // ================= REGISTER =================
+// ================= REGISTER =================
 exports.register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -180,16 +181,23 @@ exports.register = async (req, res, next) => {
       });
     }
 
-    const [existing] = await db.query(
+    // Check existing users
+    const [existingUsers] = await db.query(
       "SELECT id FROM users WHERE email = ?",
       [email]
     );
 
-    if (existing.length > 0) {
+    if (existingUsers.length > 0) {
       return res.status(400).json({
-        message: "User already exists",
+        message: "Email already registered",
       });
     }
+
+    // Remove previous pending registration if exists
+    await db.query(
+      "DELETE FROM pending_registrations WHERE email = ?",
+      [email]
+    );
 
     const otp = Math.floor(
       100000 + Math.random() * 900000
@@ -197,15 +205,24 @@ exports.register = async (req, res, next) => {
 
     const otpExpiry = new Date(
       Date.now() + 5 * 60 * 1000
-    ); // 5 minutes
+    );
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(
+      password,
+      10
+    );
 
     await db.query(
-      `INSERT INTO users
+      `INSERT INTO pending_registrations
       (name, email, password, otp, otp_expiry)
       VALUES (?, ?, ?, ?, ?)`,
-      [name, email, hashedPassword, otp, otpExpiry]
+      [
+        name,
+        email,
+        hashedPassword,
+        otp,
+        otpExpiry,
+      ]
     );
 
     await sendOTP(email, otp);
@@ -221,52 +238,69 @@ exports.register = async (req, res, next) => {
 };
 
 // ================= VERIFY OTP =================
+// ================= VERIFY OTP =================
 exports.verifyOTP = async (req, res, next) => {
   try {
     const { email, otp } = req.body;
 
-    const [results] = await db.query(
-      "SELECT * FROM users WHERE email = ?",
+    const [pending] = await db.query(
+      `SELECT *
+       FROM pending_registrations
+       WHERE email = ?`,
       [email]
     );
 
-    if (results.length === 0) {
+    if (pending.length === 0) {
       return res.status(404).json({
-        message: "User not found",
+        message:
+          "Registration session not found",
       });
     }
 
-    const user = results[0];
+    const registration = pending[0];
 
-    // Check expiry first
     if (
-      !user.otp_expiry ||
-      new Date() > new Date(user.otp_expiry)
+      !registration.otp_expiry ||
+      new Date() >
+        new Date(registration.otp_expiry)
     ) {
       return res.status(400).json({
-        message: "OTP has expired",
+        message: "OTP expired",
       });
     }
 
-    // Check OTP
-    if (user.otp !== otp) {
+    if (registration.otp !== otp) {
       return res.status(400).json({
         message: "Invalid OTP",
       });
     }
 
     await db.query(
-      `UPDATE users
-       SET is_verified = 1,
-           otp = NULL,
-           otp_expiry = NULL
+      `INSERT INTO users
+      (
+        name,
+        email,
+        password,
+        is_verified
+      )
+      VALUES (?, ?, ?, 1)`,
+      [
+        registration.name,
+        registration.email,
+        registration.password,
+      ]
+    );
+
+    await db.query(
+      `DELETE FROM pending_registrations
        WHERE email = ?`,
       [email]
     );
 
     res.status(200).json({
       success: true,
-      message: "Email verified successfully",
+      message:
+        "Account created successfully",
     });
 
   } catch (error) {
