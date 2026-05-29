@@ -1,10 +1,66 @@
 const express = require("express");
 const router = express.Router();
+
 const authController = require("../controllers/authController");
 
-router.post("/register", authController.register);
-router.post("/verify-otp", authController.verifyOTP);
-router.post("/login", authController.login);
-router.post("/google-login", authController.googleLogin);
+const auth =
+  require("../middleware/authMiddleware");
+  // Profile
+router.get(
+  "/profile",
+  auth,
+  authController.getProfile
+);
+
+router.put(
+  "/profile",
+  auth,
+  authController.updateProfile
+);
+
+// Password Reset
+router.post(
+  "/forgot-password",
+  authController.forgotPassword
+);
+
+router.post(
+  "/reset-password",
+  authController.resetPassword
+);
+
+const {
+  loginLimiter,
+  registerLimiter,
+  otpLimiter,
+} = require("../middleware/rateLimiter");
+
+// Register
+router.post(
+  "/register",
+  registerLimiter,
+  authController.register
+);
+
+// Verify OTP
+router.post(
+  "/verify-otp",
+  otpLimiter,
+  authController.verifyOTP
+);
+
+// Login
+router.post(
+  "/login",
+  loginLimiter,
+  authController.login
+);
+
+// Google Login
+router.post(
+  "/google-login",
+  loginLimiter,
+  authController.googleLogin
+);
 
 module.exports = router;

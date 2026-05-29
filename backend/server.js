@@ -5,11 +5,14 @@ const cors = require("cors");
 
 const authRoutes = require("./routes/authRoutes");
 const auth = require("./middleware/authMiddleware");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
-// ✅ MIDDLEWARE
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+// ================= CORS =================
+const allowedOrigins =
+  process.env.ALLOWED_ORIGINS?.split(",") || [];
+
 app.use(
   cors({
     origin: allowedOrigins,
@@ -17,23 +20,25 @@ app.use(
   })
 );
 
-
+// ================= BODY PARSER =================
 app.use(express.json());
 
-// ✅ TEST ROUTE
+// ================= ROOT =================
 app.get("/", (req, res) => {
   res.send("🚀 Backend is running");
 });
 
-// ✅ PROTECTED ROUTE
-app.get("/api/profile", auth, (req, res) => {
-  res.json({
-    message: "Protected data",
-    user: req.user,
+// ================= HEALTH CHECK =================
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    status: "OK",
+    uptime: process.uptime(),
+    timestamp: new Date(),
   });
 });
 
-// ✅ AUTH ROUTES (ALL LOGIC MOVED HERE)
+// ================= API STATUS =================
 app.get("/api", (req, res) => {
   res.json({
     success: true,
@@ -41,11 +46,26 @@ app.get("/api", (req, res) => {
   });
 });
 
+// ================= AUTH ROUTES =================
 app.use("/api", authRoutes);
 
-// ✅ START SERVER
+// ================= PROTECTED ROUTE =================
+app.get("/api/profile", auth, (req, res) => {
+  res.json({
+    success: true,
+    message: "Protected data",
+    user: req.user,
+  });
+});
+
+// ================= GLOBAL ERROR HANDLER =================
+app.use(errorHandler);
+
+// ================= START SERVER =================
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(
+    `🚀 IdeaNestle Backend running on port ${PORT}`
+  );
 });

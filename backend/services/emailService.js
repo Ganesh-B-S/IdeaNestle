@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-// Create transporter using env variables
+// Create transporter
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// 🔹 Generic email sender (reusable)
+// Generic sender
 async function sendEmail({ to, subject, text }) {
   try {
     const info = await transporter.sendMail({
@@ -26,13 +26,25 @@ async function sendEmail({ to, subject, text }) {
   }
 }
 
-// 🔹 OTP sender (uses generic function)
+// Registration OTP
 async function sendOTP(email, otp) {
   return sendEmail({
     to: email,
-    subject: "OTP Verification",
-    text: `Your OTP is: ${otp}. It will expire in 5 minutes.`,
+    subject: "IdeaNestle Email Verification",
+    text: `Your verification OTP is ${otp}. It expires in 5 minutes.`,
   });
 }
 
-module.exports = sendOTP;
+// Password Reset OTP
+async function sendResetOTP(email, otp) {
+  return sendEmail({
+    to: email,
+    subject: "IdeaNestle Password Reset",
+    text: `Your password reset OTP is ${otp}. It expires in 5 minutes.`,
+  });
+}
+
+module.exports = {
+  sendOTP,
+  sendResetOTP,
+};
