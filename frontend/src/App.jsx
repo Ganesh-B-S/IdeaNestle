@@ -1,4 +1,3 @@
-import { Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -9,6 +8,7 @@ import Register from "./pages/Register";
 import VerifyOTP from "./pages/VerifyOTP";
 import Dashboard from "./pages/Dashboard";
 import About from "./pages/About";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
