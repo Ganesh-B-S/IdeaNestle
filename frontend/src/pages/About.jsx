@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import "./About.css";
 export default function About() {
   return (
-    <div style={{ padding: "40px" }}>
+    <div className="about-container">
       <h1>About Me</h1>
 
       <p>

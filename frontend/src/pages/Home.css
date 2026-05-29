@@ -24,6 +24,7 @@
   max-width: 800px;
 }
 
+
 .hero-content h1 {
   font-size: 3rem;
   margin-bottom: 10px;
@@ -59,7 +60,6 @@
 
   .hero {
     height: auto;
-    min-height: 100vh;
   }
 }
 
@@ -67,6 +67,7 @@
   color: #00bcd4;
   text-decoration: none;
   font-weight: 500;
+  
 }
 
 #contact a:hover {

@@ -8,6 +8,25 @@
 }
 
 .auth-box {
+  box-sizing: border-box;
+}
+
+.auth-box input:focus {
+  outline: none;
+  border-color: #333;
+}
+
+.auth-box button {
+  transition: background-color 0.3s ease;
+}
+
+@media (max-width: 480px) {
+  .auth-box {
+    padding: 25px;
+  }
+}
+
+.auth-box {
   background: #ffffff;
   padding: 40px;
   width: 100%;

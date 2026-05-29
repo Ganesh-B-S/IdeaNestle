@@ -49,16 +49,19 @@ export default function Register() {
     try {
       const res = await registerUser({ name, email, password });
 
-      if (res.message === "User registered successfully") {
-        navigate("/login");
+      if (res.success) {
+        navigate("/verify-otp", {
+          state: { email: email.trim() },
+        });
       } else {
-        setError(res.message);
+        setError(res.message || "Registration failed");
       }
-    } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
+    } catch (error) {
+        console.error(error);
+        setError("Something went wrong. Please try again.");
+      } finally {
       setLoading(false);
-    }
+      } 
   }
 
   return (

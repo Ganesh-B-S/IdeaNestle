@@ -39,13 +39,14 @@ export default function Login() {
     try {
       const res = await loginUser({ email, password });
 
-      if (res.token) {
+      if (res?.token) {
         localStorage.setItem("token", res.token);
         navigate("/dashboard");
       } else {
         setError(res.message);
       }
-    } catch {
+    } catch (err){
+      console.error(err);
       setError("Unable to login. Try again.");
     } finally {
       setLoading(false);

@@ -9,12 +9,14 @@ const auth = require("./middleware/authMiddleware");
 const app = express();
 
 // ✅ MIDDLEWARE
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
 app.use(
   cors({
-    origin: "http://localhost:5173", // change later to your domain
+    origin: allowedOrigins,
     credentials: true,
   })
 );
+
 
 app.use(express.json());
 
@@ -32,6 +34,13 @@ app.get("/api/profile", auth, (req, res) => {
 });
 
 // ✅ AUTH ROUTES (ALL LOGIC MOVED HERE)
+app.get("/api", (req, res) => {
+  res.json({
+    success: true,
+    message: "IdeaNestle API is running",
+  });
+});
+
 app.use("/api", authRoutes);
 
 // ✅ START SERVER

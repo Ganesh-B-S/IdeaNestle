@@ -2,6 +2,11 @@
   margin: 0;
   padding: 0;
 }
+
+#root {
+  min-height: 100vh;
+}
+
 .logo {
   height: 9em;
   padding: 3em;

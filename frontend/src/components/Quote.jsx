@@ -1,29 +1,22 @@
 import { useEffect, useState } from "react";
 
+const quotes = [
+  "Consistency beats motivation.",
+  "Small progress is still progress.",
+  "Dreams demand action.",
+  "Success is built daily."
+];
+
 function Quote() {
-  const [quote, setQuote] = useState("Loading quote...");
-  const [error, setError] = useState(false);
+  const [quote, setQuote] = useState("");
 
   useEffect(() => {
-    async function fetchQuote() {
-      try {
-        const res = await fetch("https://api.quotable.io/random");
+    const random =
+      quotes[Math.floor(Math.random() * quotes.length)];
 
-        if (!res.ok) {
-          throw new Error("API error");
-        }
-
-        const data = await res.json();
-        setQuote(data.content);
-      } catch (err) {
-        console.error("Quote fetch failed:", err);
-        setError(true);
-        setQuote("“Consistency beats motivation.”");
-      }
-    }
-
-    fetchQuote();
+    setQuote(random);
   }, []);
+
 
   return (
     <blockquote

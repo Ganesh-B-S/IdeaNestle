@@ -31,7 +31,10 @@ exports.register = async (req, res) => {
 
     await sendOTP(email, otp);
 
-    res.json({ message: "OTP sent" });
+    res.json({
+      success: true,
+      message: "OTP sent",
+    });
 
   } catch (error) {
     console.error(error);
@@ -64,7 +67,10 @@ exports.verifyOTP = async (req, res) => {
       [email]
     );
 
-    res.json({ message: "Verified successfully" });
+    res.json({
+      success: true,
+      message: "Verified successfully",
+    });
 
   } catch (error) {
     console.error(error);
