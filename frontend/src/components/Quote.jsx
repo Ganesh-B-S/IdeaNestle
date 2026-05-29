@@ -4,7 +4,7 @@ const quotes = [
   "Consistency beats motivation.",
   "Small progress is still progress.",
   "Dreams demand action.",
-  "Success is built daily."
+  "Success is built daily.",
 ];
 
 function Quote() {
@@ -17,13 +17,11 @@ function Quote() {
     setQuote(random);
   }, []);
 
-
   return (
     <blockquote
       style={{
         fontStyle: "italic",
         margin: "20px 0",
-        opacity: error ? 0.7 : 1,
       }}
     >
       {quote}
