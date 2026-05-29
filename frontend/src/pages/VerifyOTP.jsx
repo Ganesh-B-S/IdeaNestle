@@ -42,7 +42,7 @@ export default function VerifyOTP() {
       const data = await res.json();
 
       if (data.success) {
-        setMessage("OTP verified successfully");
+        setMessage("Account created successfully");
 
         setTimeout(() => {
           navigate("/login");

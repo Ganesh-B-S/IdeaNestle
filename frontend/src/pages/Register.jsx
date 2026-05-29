@@ -8,6 +8,7 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,6 +32,10 @@ export default function Register() {
       return "Password must be at least 6 characters";
     }
 
+    if (password !== confirmPassword) {
+      return "Passwords do not match";
+    }
+
     return null;
   }
 
@@ -48,7 +53,7 @@ export default function Register() {
 
     try {
       const res = await registerUser({ name, email, password });
-
+      
       if (res.success) {
         navigate("/verify-otp", {
           state: { email: email.trim() },
@@ -91,9 +96,15 @@ export default function Register() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
 
         <button type="submit" disabled={loading}>
-          {loading ? "Creating..." : "Create Account"}
+          {loading ? "Sending OTP..." : "Send OTP"}
         </button>
 
         <div className="auth-link">
