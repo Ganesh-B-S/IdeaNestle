@@ -8,7 +8,7 @@ const auth = require("./middleware/authMiddleware");
 const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
-
+app.set("trust proxy", 1);
 // ================= CORS =================
 const allowedOrigins =
   process.env.ALLOWED_ORIGINS?.split(",") || [];
