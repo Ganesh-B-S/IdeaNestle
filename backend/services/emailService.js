@@ -1,42 +1,41 @@
-const nodemailer = require("nodemailer");
-console.log("SMTP_HOST =", process.env.SMTP_HOST);
-console.log("SMTP_PORT =", process.env.SMTP_PORT);
-console.log("SMTP_USER =", process.env.SMTP_USER);
-console.log("SMTP_PASS exists =", !!process.env.SMTP_PASS);
-console.log("Using Brevo SMTP");
-// Create transporter
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+const axios = require("axios");
 
-//  Transporter Verification
-transporter.verify((error) => {
-  if (error) {
-    console.error("SMTP Error:", error);
-  } else {
-    console.log("SMTP Server Ready");
-  }
-});
-
-// Generic sender
 async function sendEmail({ to, subject, text }) {
   try {
-    const info = await transporter.sendMail({
-      from: process.env.SMTP_USER,
-      to,
-      subject,
-      text,
-    });
+    const response = await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: {
+          name: "IdeaNestle",
+          email: "ideanestle.support@gmail.com",
+        },
+        to: [
+          {
+            email: to,
+          },
+        ],
+        subject,
+        textContent: text,
+      },
+      {
+        headers: {
+          accept: "application/json",
+          "api-key": process.env.BREVO_API_KEY,
+          "content-type": "application/json",
+        },
+      }
+    );
 
-    console.log("✅ Email sent:", info.response);
+    console.log(
+      "✅ Email sent:",
+      response.data.messageId
+    );
   } catch (error) {
-    console.error("❌ Email error:", error.message);
+    console.error(
+      "❌ Brevo Email Error:",
+      error.response?.data || error.message
+    );
+
     throw new Error("Failed to send email");
   }
 }
