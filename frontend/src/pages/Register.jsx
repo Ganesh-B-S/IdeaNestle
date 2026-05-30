@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../services/authService";
-import { isValidEmail } from "../utils/validation";
+import {
+  isValidEmail,
+  isStrongPassword,
+} from "../utils/validation";
 import "./Auth.css";
 
 export default function Register() {

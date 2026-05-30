@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const {
   sendOTP,
   sendResetOTP,
+  sendWelcomeEmail,
 } = require("../services/emailService");
 
 const { OAuth2Client } = require("google-auth-library");
@@ -174,7 +175,17 @@ exports.resetPassword = async (req, res, next) => {
 exports.register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number.",
+      });
+    }
+    
     if (!name || !email || !password) {
       return res.status(400).json({
         message: "All fields are required",
@@ -335,6 +346,11 @@ exports.verifyOTP = async (req, res, next) => {
         registration.email,
         registration.password,
       ]
+    );
+    
+    await sendWelcomeEmail(
+      registration.email,
+      registration.name
     );
 
     await db.query(
