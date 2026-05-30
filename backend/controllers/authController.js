@@ -169,7 +169,7 @@ exports.resetPassword = async (req, res, next) => {
   }
 };
 
-// ================= REGISTER =================
+
 // ================= REGISTER =================
 exports.register = async (req, res, next) => {
   try {
@@ -237,7 +237,53 @@ exports.register = async (req, res, next) => {
   }
 };
 
-// ================= VERIFY OTP =================
+
+exports.resendOTP = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const [pending] = await db.query(
+      `SELECT *
+       FROM pending_registrations
+       WHERE email = ?`,
+      [email]
+    );
+
+    if (pending.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Registration not found",
+      });
+    }
+
+    const otp = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
+
+    const otpExpiry = new Date(
+      Date.now() + 5 * 60 * 1000
+    );
+
+    await db.query(
+      `UPDATE pending_registrations
+       SET otp = ?,
+           otp_expiry = ?
+       WHERE email = ?`,
+      [otp, otpExpiry, email]
+    );
+
+    await sendOTP(email, otp);
+
+    res.json({
+      success: true,
+      message: "OTP resent successfully",
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
 // ================= VERIFY OTP =================
 exports.verifyOTP = async (req, res, next) => {
   try {

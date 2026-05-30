@@ -15,6 +15,9 @@ export default function Register() {
 
   const navigate = useNavigate();
 
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
   function validateForm() {
     if (!name || !email || !password) {
       return "All fields are required";
@@ -28,8 +31,11 @@ export default function Register() {
       return "Enter a valid email address";
     }
 
-    if (password.length < 6) {
-      return "Password must be at least 6 characters";
+    if (!passwordRegex.test(password)) {
+      return (
+        "Password must contain at least 8 characters, " +
+        "one uppercase letter, one lowercase letter and one number"
+      );
     }
 
     if (password !== confirmPassword) {
@@ -92,10 +98,26 @@ export default function Register() {
 
         <input
           type="password"
-          placeholder="Password (min 6 characters)"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <div
+          style={{
+            fontSize: "12px",
+            color: "#666",
+            textAlign: "left",
+            marginBottom: "10px",
+          }}
+        >
+  Password must contain:
+  <ul>
+    <li>Minimum 8 characters</li>
+    <li>1 uppercase letter</li>
+    <li>1 lowercase letter</li>
+    <li>1 number</li>
+  </ul>
+</div>
         <input
           type="password"
           placeholder="Confirm Password"

@@ -49,6 +49,12 @@ router.post(
   authController.verifyOTP
 );
 
+// Resend
+router.post(
+  "/resend-otp",
+  authController.resendOTP
+);
+
 // Login
 router.post(
   "/login",
