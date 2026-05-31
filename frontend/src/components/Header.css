@@ -79,3 +79,17 @@
     justify-content: center;
   }
 }
+.menu-btn {
+  background: transparent;
+  border: none;
+
+  color: white;
+
+  font-size: 24px;
+
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  color: #60a5fa;
+}

@@ -1,8 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import Sidebar from "./Sidebar";
+
 import "./Header.css";
 
 function Header() {
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -10,14 +13,8 @@ function Header() {
     localStorage.getItem("user") || "{}"
   );
 
-  function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    navigate("/logout");
-  }
-
   return (
+  <>
     <header className="header">
       <div className="header-content">
         <div className="logo-section">
@@ -49,17 +46,27 @@ function Header() {
               </span>
 
               <button
-                className="logout-btn"
-                onClick={handleLogout}
+                className="menu-btn"
+                onClick={() =>
+                  setIsOpen(true)
+                }
               >
-                Logout
+                ☰
               </button>
             </>
           )}
         </nav>
       </div>
     </header>
-  );
+
+    <Sidebar
+      isOpen={isOpen}
+      closeSidebar={() =>
+        setIsOpen(false)
+      }
+    />
+  </>
+);
 }
 
 export default Header;
