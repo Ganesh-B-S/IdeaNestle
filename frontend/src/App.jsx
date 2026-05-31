@@ -34,7 +34,7 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute> } />
         <Route
-          path="/profile"
+          path="/Profile"
           element={
             <ProtectedRoute>
               <Profile />
@@ -43,7 +43,7 @@ function App() {
         />
 
         <Route
-          path="/ideas"
+          path="/Ideas"
           element={
             <ProtectedRoute>
               <Ideas />
@@ -52,7 +52,7 @@ function App() {
         />
 
         <Route
-          path="/messages"
+          path="/Messages"
           element={
             <ProtectedRoute>
               <Messages />
@@ -61,7 +61,7 @@ function App() {
         />
 
         <Route
-          path="/settings"
+          path="/Settings"
           element={
             <ProtectedRoute>
               <Settings />
