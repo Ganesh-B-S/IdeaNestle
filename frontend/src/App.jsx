@@ -8,6 +8,8 @@ import Register from "./pages/Register";
 import VerifyOTP from "./pages/VerifyOTP";
 import Dashboard from "./pages/Dashboard";
 import About from "./pages/About";
+import Logout from "./pages/Logout";
+
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -25,15 +27,8 @@ function App() {
         <Route path="/verify-otp" element={<VerifyOTP />} />
 
         <Route path="/about" element={<About />} />
-
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute> } />
 
       </Routes>
     </>

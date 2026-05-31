@@ -40,7 +40,18 @@ export default function Login() {
       const res = await loginUser({ email, password });
 
       if (res?.token) {
-        localStorage.setItem("token", res.token);
+        localStorage.setItem(
+          "token",
+          res.token
+        );
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            name: res.user.name,
+            email: res.user.email,
+          })
+        );
         navigate("/dashboard");
       } else {
         setError(res.message);

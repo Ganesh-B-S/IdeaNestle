@@ -1,24 +1,28 @@
-import { useNavigate } from "react-router-dom";
-
 export default function Dashboard() {
-  const navigate = useNavigate();
-
-  function handleLogout() {
-    localStorage.removeItem("token");
-    navigate("/login");
-  }
+  const user = JSON.parse(
+    localStorage.getItem("user") || "{}"
+  );
 
   return (
-    <div className="dashboard-container">
-      <h2>Welcome to your Dashboard</h2>
+    <div
+      style={{
+        maxWidth: "1000px",
+        margin: "50px auto",
+        textAlign: "center",
+      }}
+    >
+      <h1>
+        Welcome back,
+        {" "}
+        {user.name}
+        {" "}
+        👋
+      </h1>
 
-      <button onClick={() => navigate("/about")}>
-        About Me
-      </button>
-
-      <button onClick={handleLogout}>
-        Logout
-      </button>
+      <p>
+        Ready to turn your ideas into
+        reality today?
+      </p>
     </div>
   );
 }
