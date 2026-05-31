@@ -9,6 +9,10 @@ import VerifyOTP from "./pages/VerifyOTP";
 import Dashboard from "./pages/Dashboard";
 import About from "./pages/About";
 import Logout from "./pages/Logout";
+import Profile from "./pages/Profile";
+import Ideas from "./pages/Ideas";
+import Messages from "./pages/Messages";
+import Settings from "./pages/Settings";
 
 import { Routes, Route } from "react-router-dom";
 
@@ -29,7 +33,41 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute> } />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
 
+        <Route
+          path="/ideas"
+          element={
+            <ProtectedRoute>
+              <Ideas />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/messages"
+          element={
+            <ProtectedRoute>
+              <Messages />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
