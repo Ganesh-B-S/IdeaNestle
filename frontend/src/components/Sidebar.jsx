@@ -8,11 +8,13 @@ export default function Sidebar({
   const navigate = useNavigate();
 
   function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  closeSidebar();
 
-    navigate("/logout");
-  }
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  window.location.href = "/logout";
+}
 
   return (
     <>
