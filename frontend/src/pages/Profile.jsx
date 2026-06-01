@@ -1,53 +1,71 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Profile.css";
 
 export default function Profile() {
-  const currentUser = JSON.parse(
+  const user = JSON.parse(
     localStorage.getItem("user") || "{}"
   );
 
   const [name, setName] = useState(
-    currentUser.name || ""
+    user.name || ""
   );
 
   const [email] = useState(
-    currentUser.email || ""
+    user.email || ""
   );
 
-  const [bio, setBio] = useState(
-    localStorage.getItem("bio") || ""
-  );
+  const [bio, setBio] = useState("");
 
   const [profilePic, setProfilePic] =
-    useState(
-      localStorage.getItem("profilePic") ||
-        ""
-    );
+    useState("");
+
+  useEffect(() => {
+    const savedBio =
+      localStorage.getItem("bio");
+
+    const savedPic =
+      localStorage.getItem(
+        "profilePic"
+      );
+
+    if (savedBio) {
+      setBio(savedBio);
+    }
+
+    if (savedPic) {
+      setProfilePic(savedPic);
+    }
+  }, []);
 
   function handleImageUpload(e) {
-    const file = e.target.files[0];
+    const file =
+      e.target.files?.[0];
 
     if (!file) return;
 
-    const reader = new FileReader();
+    const reader =
+      new FileReader();
 
     reader.onloadend = () => {
-      setProfilePic(reader.result);
+      setProfilePic(
+        reader.result
+      );
     };
 
     reader.readAsDataURL(file);
   }
 
-  function saveProfile() {
+  function handleSave() {
     const updatedUser = {
-      ...currentUser,
+      ...user,
       name,
-      email,
     };
 
     localStorage.setItem(
       "user",
-      JSON.stringify(updatedUser)
+      JSON.stringify(
+        updatedUser
+      )
     );
 
     localStorage.setItem(
@@ -61,42 +79,56 @@ export default function Profile() {
     );
 
     alert(
-      "Profile updated successfully 🎉"
+      "Profile updated successfully!"
     );
 
     window.location.reload();
   }
 
   return (
-    <div className="profile-container">
-      <h1>My Profile</h1>
+    <div className="profile-page">
+      <div className="profile-card">
 
-      <div className="profile-avatar">
+        <h1>
+          My Profile
+        </h1>
 
-        {profilePic ? (
-          <img
-            src={profilePic}
-            alt="Profile"
-          />
-        ) : (
-          <div className="avatar-placeholder">
-            👤
-          </div>
-        )}
+        <div className="avatar-section">
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={
-            handleImageUpload
-          }
-        />
-      </div>
+          {profilePic ? (
+            <img
+              src={profilePic}
+              alt="Profile"
+              className="avatar"
+            />
+          ) : (
+            <div className="avatar-placeholder">
+              👤
+            </div>
+          )}
 
-      <div className="profile-form">
-        <div>
-          <label>Name</label>
+          <label className="upload-btn">
+            Upload Photo
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={
+                handleImageUpload
+              }
+              hidden
+            />
+          </label>
+
+        </div>
+
+        <div className="form-group">
+          <label>
+            Full Name
+          </label>
+
           <input
+            type="text"
             value={name}
             onChange={(e) =>
               setName(
@@ -106,33 +138,42 @@ export default function Profile() {
           />
         </div>
 
-        <div>
-          <label>Email</label>
+        <div className="form-group">
+          <label>
+            Email
+          </label>
+
           <input
+            type="email"
             value={email}
             disabled
           />
         </div>
 
-        <div>
-          <label>Bio</label>
+        <div className="form-group">
+          <label>
+            Bio
+          </label>
+
           <textarea
+            rows="5"
             value={bio}
             onChange={(e) =>
               setBio(
                 e.target.value
               )
             }
-            placeholder="Tell us about yourself..."
+            placeholder="Tell everyone about yourself..."
           />
         </div>
 
         <button
           className="save-btn"
-          onClick={saveProfile}
+          onClick={handleSave}
         >
           Save Changes
         </button>
+
       </div>
     </div>
   );
