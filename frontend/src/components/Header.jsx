@@ -1,17 +1,48 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
-
+import { useState, useEffect } from "react";
 import "./Header.css";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(
+  localStorage.getItem("token")
+);
 
-  const user = JSON.parse(
+const [user, setUser] = useState(
+  JSON.parse(
     localStorage.getItem("user") || "{}"
+  )
+);
+
+useEffect(() => {
+  const refreshAuth = () => {
+    setToken(
+      localStorage.getItem("token")
+    );
+
+    setUser(
+      JSON.parse(
+        localStorage.getItem("user") || "{}"
+      )
+    );
+  };
+
+  refreshAuth();
+
+  window.addEventListener(
+    "focus",
+    refreshAuth
   );
+
+  return () =>
+    window.removeEventListener(
+      "focus",
+      refreshAuth
+    );
+}, []);
 
   return (
   <>

@@ -52,7 +52,7 @@ export default function Login() {
             email: res.user.email,
           })
         );
-        navigate("/dashboard");
+        window.location.href = "/dashboard";
       } else {
         setError(res.message);
       }
