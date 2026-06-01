@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import Sidebar from "./Sidebar";
 import { useState, useEffect } from "react";
 import "./Header.css";
