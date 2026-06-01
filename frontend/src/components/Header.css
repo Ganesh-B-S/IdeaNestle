@@ -93,3 +93,17 @@
 .menu-btn:hover {
   color: #60a5fa;
 }
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.user-name {
+  color: white;
+  font-weight: 600;
+}
