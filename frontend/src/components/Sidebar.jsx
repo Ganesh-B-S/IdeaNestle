@@ -31,28 +31,28 @@ export default function Sidebar({
         <h2>IdeaNestle</h2>
 
         <Link
-          to="/profile"
+          to="/Profile"
           onClick={closeSidebar}
         >
           👤 Profile
         </Link>
 
         <Link
-          to="/ideas"
+          to="/Ideas"
           onClick={closeSidebar}
         >
           💡 Ideas
         </Link>
 
         <Link
-          to="/messages"
+          to="/Messages"
           onClick={closeSidebar}
         >
           💬 Messages
         </Link>
 
         <Link
-          to="/settings"
+          to="/Settings"
           onClick={closeSidebar}
         >
           ⚙ Settings
