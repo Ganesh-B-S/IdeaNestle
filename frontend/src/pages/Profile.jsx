@@ -89,17 +89,15 @@ export default function Profile() {
             alt="Profile"
             className="avatar"
           />
+          <label className="upload-btn">
+            Upload Photo
 
-          <input
-            type="text"
-            placeholder="Profile Image URL"
-            value={profilePicture}
-            onChange={(e) =>
-              setProfilePicture(
-                e.target.value
-              )
-            }
-          />
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+            />
+          </label>
         </div>
 
         <div className="form-group">
