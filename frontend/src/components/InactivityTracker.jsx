@@ -14,13 +14,17 @@ export default function InactivityTracker() {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
 
+        window.dispatchEvent(
+          new Event("authChanged")
+        );
+
         sessionStorage.setItem(
           "logoutReason",
           "inactive"
         );
 
         navigate("/logout");
-      }, 30 * 1000); // 5 min
+      }, 5 * 60 * 1000); // 5 minutes
     };
 
     const events = [
@@ -30,6 +34,7 @@ export default function InactivityTracker() {
       "scroll",
       "keypress",
       "touchstart",
+      "touchmove",
     ];
 
     events.forEach((event) =>

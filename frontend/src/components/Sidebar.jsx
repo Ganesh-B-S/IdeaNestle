@@ -1,5 +1,8 @@
 import "./Sidebar.css";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
 export default function Sidebar({
   isOpen,
@@ -8,13 +11,22 @@ export default function Sidebar({
   const navigate = useNavigate();
 
   function handleLogout() {
-  closeSidebar();
+    closeSidebar();
 
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
-  window.location.href = "/logout";
-}
+    window.dispatchEvent(
+      new Event("authChanged")
+    );
+
+    sessionStorage.setItem(
+      "logoutReason",
+      "manual"
+    );
+
+    navigate("/logout");
+  }
 
   return (
     <>
@@ -33,28 +45,28 @@ export default function Sidebar({
         <h2>IdeaNestle</h2>
 
         <Link
-          to="/Profile"
+          to="/profile"
           onClick={closeSidebar}
         >
           👤 Profile
         </Link>
 
         <Link
-          to="/Ideas"
+          to="/ideas"
           onClick={closeSidebar}
         >
           💡 Ideas
         </Link>
 
         <Link
-          to="/Messages"
+          to="/messages"
           onClick={closeSidebar}
         >
           💬 Messages
         </Link>
 
         <Link
-          to="/Settings"
+          to="/settings"
           onClick={closeSidebar}
         >
           ⚙ Settings

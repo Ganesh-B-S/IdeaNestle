@@ -7,6 +7,7 @@ import "./Auth.css";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,6 +29,7 @@ export default function Login() {
     e.preventDefault();
 
     const validationError = validateForm();
+
     if (validationError) {
       setError(validationError);
       return;
@@ -37,7 +39,10 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await loginUser({ email, password });
+      const res = await loginUser({
+        email,
+        password,
+      });
 
       if (res?.token) {
         localStorage.setItem(
@@ -52,13 +57,24 @@ export default function Login() {
             email: res.user.email,
           })
         );
-        window.location.href = "/dashboard";
+
+        window.dispatchEvent(
+          new Event("authChanged")
+        );
+
+        navigate("/dashboard");
       } else {
-        setError(res.message);
+        setError(
+          res?.message ||
+            "Login failed"
+        );
       }
-    } catch (err){
+    } catch (err) {
       console.error(err);
-      setError("Unable to login. Try again.");
+
+      setError(
+        "Unable to login. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -66,31 +82,49 @@ export default function Login() {
 
   return (
     <div className="auth-container">
-      <form className="auth-box fade-in" onSubmit={handleLogin}>
+      <form
+        className="auth-box fade-in"
+        onSubmit={handleLogin}
+      >
         <h2>Login</h2>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+          <p style={{ color: "red" }}>
+            {error}
+          </p>
+        )}
 
         <input
           type="email"
           placeholder="Email address"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
         />
 
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) =>
+            setPassword(e.target.value)
+          }
         />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
+        <button
+          type="submit"
+          disabled={loading}
+        >
+          {loading
+            ? "Logging in..."
+            : "Login"}
         </button>
 
         <div className="auth-link">
-          <Link to="/register">Create an account</Link>
+          <Link to="/register">
+            Create an account
+          </Link>
         </div>
       </form>
     </div>
