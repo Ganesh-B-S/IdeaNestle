@@ -1,179 +1,161 @@
-import { useState, useEffect } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
+
 import "./Profile.css";
 
+const API =
+  import.meta.env.VITE_API_URL;
+
 export default function Profile() {
-  const user = JSON.parse(
-    localStorage.getItem("user") || "{}"
-  );
+  const [name, setName] =
+    useState("");
 
-  const [name, setName] = useState(
-    user.name || ""
-  );
+  const [email, setEmail] =
+    useState("");
 
-  const [email] = useState(
-    user.email || ""
-  );
+  const [bio, setBio] =
+    useState("");
 
-  const [bio, setBio] = useState("");
+  const [
+    profilePicture,
+    setProfilePicture,
+  ] = useState("");
 
-  const [profilePic, setProfilePic] =
+  const [message, setMessage] =
     useState("");
 
   useEffect(() => {
-    const savedBio =
-      localStorage.getItem("bio");
-
-    const savedPic =
-      localStorage.getItem(
-        "profilePic"
-      );
-
-    if (savedBio) {
-      setBio(savedBio);
-    }
-
-    if (savedPic) {
-      setProfilePic(savedPic);
-    }
+    loadProfile();
   }, []);
 
-  function handleImageUpload(e) {
-    const file =
-      e.target.files?.[0];
+  async function loadProfile() {
+    try {
+      const token =
+        localStorage.getItem(
+          "token"
+        );
 
-    if (!file) return;
-
-    const reader =
-      new FileReader();
-
-    reader.onloadend = () => {
-      setProfilePic(
-        reader.result
+      const res = await fetch(
+        `${API}/api/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-    };
 
-    reader.readAsDataURL(file);
+      const data =
+        await res.json();
+
+      setName(data.name || "");
+      setEmail(data.email || "");
+      setBio(data.bio || "");
+
+      setProfilePicture(
+        data.profile_picture || ""
+      );
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  function handleSave() {
-    const updatedUser = {
-      ...user,
-      name,
-    };
+  async function saveProfile() {
+    try {
+      const token =
+        localStorage.getItem(
+          "token"
+        );
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify(
-        updatedUser
-      )
-    );
+      const res = await fetch(
+        `${API}/api/profile`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type":
+              "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name,
+            bio,
+            profile_picture:
+              profilePicture,
+          }),
+        }
+      );
 
-    localStorage.setItem(
-      "bio",
-      bio
-    );
+      const data =
+        await res.json();
 
-    localStorage.setItem(
-      "profilePic",
-      profilePic
-    );
-
-    alert(
-      "Profile updated successfully!"
-    );
-
-    window.location.reload();
+      setMessage(data.message);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
-    <div className="profile-page">
+    <div className="profile-container">
       <div className="profile-card">
+        <h1>My Profile</h1>
 
-        <h1>
-          My Profile
-        </h1>
+        <img
+          src={
+            profilePicture ||
+            "https://via.placeholder.com/150"
+          }
+          alt="Profile"
+          className="profile-avatar"
+        />
 
-        <div className="avatar-section">
+        <input
+          type="text"
+          placeholder="Profile Image URL"
+          value={profilePicture}
+          onChange={(e) =>
+            setProfilePicture(
+              e.target.value
+            )
+          }
+        />
 
-          {profilePic ? (
-            <img
-              src={profilePic}
-              alt="Profile"
-              className="avatar"
-            />
-          ) : (
-            <div className="avatar-placeholder">
-              👤
-            </div>
-          )}
+        <input
+          type="text"
+          value={name}
+          onChange={(e) =>
+            setName(
+              e.target.value
+            )
+          }
+        />
 
-          <label className="upload-btn">
-            Upload Photo
+        <input
+          type="email"
+          value={email}
+          disabled
+        />
 
-            <input
-              type="file"
-              accept="image/*"
-              onChange={
-                handleImageUpload
-              }
-              hidden
-            />
-          </label>
-
-        </div>
-
-        <div className="form-group">
-          <label>
-            Full Name
-          </label>
-
-          <input
-            type="text"
-            value={name}
-            onChange={(e) =>
-              setName(
-                e.target.value
-              )
-            }
-          />
-        </div>
-
-        <div className="form-group">
-          <label>
-            Email
-          </label>
-
-          <input
-            type="email"
-            value={email}
-            disabled
-          />
-        </div>
-
-        <div className="form-group">
-          <label>
-            Bio
-          </label>
-
-          <textarea
-            rows="5"
-            value={bio}
-            onChange={(e) =>
-              setBio(
-                e.target.value
-              )
-            }
-            placeholder="Tell everyone about yourself..."
-          />
-        </div>
+        <textarea
+          rows="4"
+          placeholder="Tell us about yourself..."
+          value={bio}
+          onChange={(e) =>
+            setBio(
+              e.target.value
+            )
+          }
+        />
 
         <button
-          className="save-btn"
-          onClick={handleSave}
+          onClick={saveProfile}
         >
           Save Changes
         </button>
 
+        {message && (
+          <p>{message}</p>
+        )}
       </div>
     </div>
   );

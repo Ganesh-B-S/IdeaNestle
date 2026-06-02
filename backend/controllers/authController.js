@@ -428,6 +428,8 @@ exports.login = async (req, res, next) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        bio: user.bio,
+        profile_picture :user.profile_picture,
       },
     });
 
@@ -435,6 +437,79 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
+
+// ================= Profile database store =================
+exports.getProfile = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const userId = req.user.id;
+
+    const [rows] = await db.query(
+      `
+      SELECT
+      id,
+      name,
+      email,
+      bio,
+      profile_picture
+      FROM users
+      WHERE id = ?
+      `,
+      [userId]
+    );
+
+    res.json(rows[0]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//---------------UPDATE PROFILE--------------------
+
+exports.updateProfile = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const userId = req.user.id;
+
+    const {
+      name,
+      bio,
+      profile_picture,
+    } = req.body;
+
+    await db.query(
+      `
+      UPDATE users
+      SET
+      name = ?,
+      bio = ?,
+      profile_picture = ?
+      WHERE id = ?
+      `,
+      [
+        name,
+        bio,
+        profile_picture,
+        userId,
+      ]
+    );
+
+    res.json({
+      success: true,
+      message:
+        "Profile updated successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 // ================= GOOGLE LOGIN =================
 exports.googleLogin = async (req, res, next) => {
