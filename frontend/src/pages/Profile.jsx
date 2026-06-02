@@ -1,27 +1,14 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-
+import { useEffect, useState } from "react";
 import "./Profile.css";
 
-const API =
-  import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL;
 
 export default function Profile() {
-  const [name, setName] =
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [bio, setBio] = useState("");
+  const [profilePicture, setProfilePicture] =
     useState("");
-
-  const [email, setEmail] =
-    useState("");
-
-  const [bio, setBio] =
-    useState("");
-
-  const [
-    profilePicture,
-    setProfilePicture,
-  ] = useState("");
 
   const [message, setMessage] =
     useState("");
@@ -33,9 +20,7 @@ export default function Profile() {
   async function loadProfile() {
     try {
       const token =
-        localStorage.getItem(
-          "token"
-        );
+        localStorage.getItem("token");
 
       const res = await fetch(
         `${API}/api/profile`,
@@ -46,13 +31,11 @@ export default function Profile() {
         }
       );
 
-      const data =
-        await res.json();
+      const data = await res.json();
 
       setName(data.name || "");
       setEmail(data.email || "");
       setBio(data.bio || "");
-
       setProfilePicture(
         data.profile_picture || ""
       );
@@ -64,9 +47,7 @@ export default function Profile() {
   async function saveProfile() {
     try {
       const token =
-        localStorage.getItem(
-          "token"
-        );
+        localStorage.getItem("token");
 
       const res = await fetch(
         `${API}/api/profile`,
@@ -86,8 +67,7 @@ export default function Profile() {
         }
       );
 
-      const data =
-        await res.json();
+      const data = await res.json();
 
       setMessage(data.message);
     } catch (error) {
@@ -96,65 +76,83 @@ export default function Profile() {
   }
 
   return (
-    <div className="profile-container">
+    <div className="profile-page">
       <div className="profile-card">
         <h1>My Profile</h1>
 
-        <img
-          src={
-            profilePicture ||
-            "https://via.placeholder.com/150"
-          }
-          alt="Profile"
-          className="profile-avatar"
-        />
+        <div className="avatar-section">
+          <img
+            src={
+              profilePicture ||
+              "/default-avatar.jpg"
+            }
+            alt="Profile"
+            className="avatar"
+          />
 
-        <input
-          type="text"
-          placeholder="Profile Image URL"
-          value={profilePicture}
-          onChange={(e) =>
-            setProfilePicture(
-              e.target.value
-            )
-          }
-        />
+          <input
+            type="text"
+            placeholder="Profile Image URL"
+            value={profilePicture}
+            onChange={(e) =>
+              setProfilePicture(
+                e.target.value
+              )
+            }
+          />
+        </div>
 
-        <input
-          type="text"
-          value={name}
-          onChange={(e) =>
-            setName(
-              e.target.value
-            )
-          }
-        />
+        <div className="form-group">
+          <label>Full Name</label>
 
-        <input
-          type="email"
-          value={email}
-          disabled
-        />
+          <input
+            type="text"
+            value={name}
+            onChange={(e) =>
+              setName(e.target.value)
+            }
+          />
+        </div>
 
-        <textarea
-          rows="4"
-          placeholder="Tell us about yourself..."
-          value={bio}
-          onChange={(e) =>
-            setBio(
-              e.target.value
-            )
-          }
-        />
+        <div className="form-group">
+          <label>Email</label>
+
+          <input
+            type="email"
+            value={email}
+            disabled
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Bio</label>
+
+          <textarea
+            rows="4"
+            placeholder="Tell us about yourself..."
+            value={bio}
+            onChange={(e) =>
+              setBio(e.target.value)
+            }
+          />
+        </div>
 
         <button
+          className="save-btn"
           onClick={saveProfile}
         >
           Save Changes
         </button>
 
         {message && (
-          <p>{message}</p>
+          <p
+            style={{
+              textAlign: "center",
+              marginTop: "15px",
+            }}
+          >
+            {message}
+          </p>
         )}
       </div>
     </div>
